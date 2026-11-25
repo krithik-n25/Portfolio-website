@@ -4778,6 +4778,47 @@ Nothing existing is edited: same #222 background, white text, Cormorant Garamond
           top: calc(var(--st, 180px) + var(--sh, 400px) * 0.45);
         }
       }
+
+      /* project detail: role line, screenshots, second button */
+      .mc .rl {
+        font: 600 11px var(--ui);
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--d);
+        margin: -12px 0 22px;
+      }
+      .mc .shots {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin: 22px 0 6px;
+      }
+      .mc .shots a:first-child {
+        grid-column: 1 / -1;
+      }
+      .mc .shots img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border: 1px solid var(--l1);
+        border-radius: 14px;
+        transition: border-color 0.3s;
+      }
+      .mc .shots a:hover img {
+        border-color: var(--lf);
+      }
+      .mc .lk2 {
+        margin-left: 12px;
+      }
+      @media (max-width: 600px) {
+        .mc .shots {
+          grid-template-columns: 1fr;
+        }
+        .mc .lk2 {
+          margin-left: 0;
+        }
+      }
     </style>
     <script>
       (function () {
@@ -5095,11 +5136,55 @@ Nothing existing is edited: same #222 background, white text, Cormorant Garamond
             ],
             art: '<svg viewBox="0 0 200 120"><rect x="34" y="10" width="132" height="100" rx="8"/><path d="M52 32h56M52 46h96M52 58h96M52 70h60"/><rect x="124" y="26" width="24" height="12" rx="2"/><circle cx="150" cy="92" r="9"/><path d="M146 92l3 3 6-6"/></svg>',
           },
+          {
+            t: "Agentic Whiteboard",
+            tag: "AI whiteboard that turns a text prompt into an editable diagram",
+            bd: "Personal Project",
+            role: "Solo developer",
+            lead: "An AI whiteboard on an infinite Excalidraw canvas. You describe a flowchart, architecture diagram, mind map or wireframe, and the AI draws it as normal editable shapes. You can also paste code and get a flowchart of it.",
+            pts: [
+              "Five diagram types from a single prompt: flowchart, architecture diagram, mind map, web wireframe and mobile wireframe, returned as editable Excalidraw elements with arrows routed by code so they avoid boxes.",
+              "Code to flowchart: paste up to 200 lines, the AI produces a Mermaid flowchart drawn on the board, and clicking a step highlights the matching lines of code.",
+              "Provider fallback: Groq is the primary model and Gemini is the fallback if Groq is rate limited or down.",
+              "Usage control: 10 AI credits per user per month, refunded automatically if a generation fails.",
+              "Boards autosave to Neon PostgreSQL, show preview cards on a dashboard, export as PNG and can be shared as a view only link.",
+            ],
+            facts: [
+              ["5", "diagram types"],
+              ["200", "line limit for code to flowchart"],
+              ["10", "AI credits per user per month"],
+              ["2", "AI providers (Groq, Gemini fallback)"],
+            ],
+            shots: [
+              ["assets/agentic-whiteboard/hero.png", "Agentic Whiteboard landing page"],
+              ["assets/agentic-whiteboard/dashboard.jpg", "Dashboard with board preview cards"],
+              ["assets/agentic-whiteboard/whiteboard.png", "Whiteboard with an AI-generated architecture diagram and flowchart"],
+            ],
+            stack: [
+              "Next.js 16",
+              "React 19",
+              "TypeScript",
+              "Tailwind CSS",
+              "Excalidraw",
+              "Groq",
+              "Gemini",
+              "Clerk",
+              "Neon",
+              "Drizzle ORM",
+              "Vercel",
+            ],
+            link: [
+              "View on GitHub",
+              "https://github.com/krithik-n25/Agentic-whiteboard",
+            ],
+            demo: "PASTE_MY_VERCEL_URL_HERE",
+            art: '<svg viewBox="0 0 200 120"><rect x="10" y="8" width="180" height="104" rx="10"/><rect x="28" y="24" width="44" height="22" rx="5"/><rect x="128" y="24" width="44" height="22" rx="5"/><path d="M72 35h54M120 31l6 4-6 4"/><path d="M100 62l18 14-18 14-18-14z"/><path d="M50 46v30h30M74 72l6 4-6 4M150 46v30h-30M126 72l-6 4 6 4"/><path d="M168 86v16M160 94h16"/></svg>',
+          },
         ];
-        /* carousel order: Margdarshak, VoltSync, DAU are the original three; 04 and 05 sit behind them */
+        /* carousel order: Margdarshak, VoltSync, DAU are the original three; 04, 05 and 06 sit behind them */
         var ORDER = [
-          3, 2, 0, 1, 4,
-        ]; /* positions around the ring: ... Solar, Margdarshak, VoltSync (front), DAU, CortexNews ... */
+          3, 2, 0, 1, 4, 5,
+        ]; /* positions around the ring: ... Solar, Margdarshak, VoltSync (front), DAU, CortexNews, Agentic Whiteboard ... */
         var items = ORDER.map(function (k) {
           return PJ[k];
         });
@@ -5160,13 +5245,50 @@ Nothing existing is edited: same #222 background, white text, Cormorant Garamond
             p.t +
             '</h2><p class="tg">' +
             p.tag +
-            "</p><p>" +
+            "</p>" +
+            (p.role ? '<p class="rl">Role · ' + p.role + "</p>" : "") +
+            "<p>" +
             p.lead +
-            "</p><h4>" +
-            (p.met ? "Highlights" : "Features") +
+            "</p>" +
+            (p.shots
+              ? '<div class="shots">' +
+                p.shots
+                  .map(function (s) {
+                    return (
+                      '<a href="' +
+                      s[0] +
+                      '" target="_blank" rel="noopener"><img src="' +
+                      s[0] +
+                      '" alt="' +
+                      s[1] +
+                      '" loading="lazy"></a>'
+                    );
+                  })
+                  .join("") +
+                "</div>"
+              : "") +
+            "<h4>" +
+            (p.met || p.facts ? "Highlights" : "Features") +
             "</h4><ul>" +
             li(p.pts) +
             "</ul>" +
+            (p.facts
+              ? '<h4>Key facts</h4><div class="mets">' +
+                p.facts
+                  .map(function (m) {
+                    return (
+                      '<div><b data-v="' +
+                      m[0] +
+                      '">' +
+                      m[0] +
+                      "</b><span>" +
+                      m[1] +
+                      "</span></div>"
+                    );
+                  })
+                  .join("") +
+                "</div>"
+              : "") +
             (p.met
               ? '<h4>Results</h4><div class="mets">' +
                 p.met
@@ -5194,6 +5316,11 @@ Nothing existing is edited: same #222 background, white text, Cormorant Garamond
                 '" target="_blank" rel="noopener">' +
                 p.link[0] +
                 " ↗</a>"
+              : "") +
+            (/^https?:\/\//.test(p.demo || "")
+              ? '<a class="lk lk2" href="' +
+                p.demo +
+                '" target="_blank" rel="noopener">Live demo ↗</a>'
               : "");
           modal.classList.add("on");
           document.body.classList.add("lock");
@@ -5259,14 +5386,17 @@ Nothing existing is edited: same #222 background, white text, Cormorant Garamond
           cards.forEach(function (c, i) {
             var d = ((i - idx + n + 2) % n) - 2,
               a = Math.abs(d),
-              sg = d < 0 ? -1 : 1;
-            var x =
-              a === 0 ? 0 : sg * (a === 1 ? (m ? 70 : 62) : m ? 120 : 138);
+              sg = d < 0 ? -1 : 1,
+              far = a > 2; /* with 6 cards, the one opposite the front waits hidden behind it */
+            var x = a === 0 || far ? 0 : sg * (a === 1 ? (m ? 70 : 62) : m ? 120 : 138);
             var z = -a * (m ? 340 : 280);
-            var r = a === 0 ? 0 : -sg * (a === 1 ? (m ? 30 : 34) : m ? 34 : 38);
+            var r = a === 0 || far ? 0 : -sg * (a === 1 ? (m ? 30 : 34) : m ? 34 : 38);
             c.classList.toggle("c", d === 0);
             c.style.zIndex = 10 - a;
-            c.style.opacity = a === 0 ? 1 : a === 1 ? 0.85 : 0.6;
+            c.style.opacity = a === 0 ? 1 : a === 1 ? 0.85 : far ? 0 : 0.6;
+            c.style.pointerEvents = far ? "none" : "";
+            c.tabIndex = far ? -1 : 0;
+            c.setAttribute("aria-hidden", far ? "true" : "false");
             c.style.transform =
               "translateY(-50%) translateX(" +
               x +

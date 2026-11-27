@@ -1,4 +1,0 @@
-default exit+300ms: loader in DOM=true, full-width bright rows=none
-default exit+1500ms: loader in DOM=false, full-width bright rows=none
-reduced motion exit+300ms: loader in DOM=false, full-width bright rows=none
-reduced motion exit+1500ms: loader in DOM=false, full-width bright rows=none

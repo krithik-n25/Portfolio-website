@@ -59,7 +59,15 @@ interface SectionObject {
   halos?: Points[];
 }
 
-export function init() {
+/** Gives the main thread back between build steps so no single task blocks input for long. */
+const yieldToMain = () =>
+  new Promise<void>((r) => {
+    const sch = (globalThis as { scheduler?: { yield?: () => Promise<void> } }).scheduler;
+    if (sch?.yield) sch.yield().then(r);
+    else setTimeout(r, 0);
+  });
+
+export async function init() {
   const cv = document.getElementById("c") as HTMLCanvasElement | null;
   if (!cv) return;
   let R: WebGLRenderer;
@@ -99,6 +107,7 @@ export function init() {
   const NZ =
     "float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}float nz(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(h(i),h(i+vec2(1,0)),f.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),f.x),f.y);}float fbm(vec2 p){float a=.5,s=0.;for(int i=0;i<4;i++){s+=a*nz(p);p*=2.03;a*=.5;}return s;}";
 
+  await yieldToMain();
   // ---------- stars, dust, motes, shooting stars ----------
   const SN = q(1900);
   const sp = new Float32Array(SN * 3);
@@ -127,6 +136,7 @@ export function init() {
   const stars = new Points(sg, starM);
   sc.add(stars);
 
+  await yieldToMain();
   const DN = q(260);
   const dp = new Float32Array(DN * 3);
   const dv: number[] = [];
@@ -140,6 +150,7 @@ export function init() {
   dg.setAttribute("position", new BufferAttribute(dp, 3));
   sc.add(new Points(dg, PM(0.045, 0.75)));
 
+  await yieldToMain();
   const MN = q(3200);
   const MP = new Float32Array(MN * 3);
   const MCOL = new Float32Array(MN * 3);
@@ -171,6 +182,7 @@ export function init() {
     shoots.push({ m, t: -Math.random() * 6 - i * 2 });
   }
 
+  await yieldToMain();
   // ---------- terrain + sun ----------
   const tg = new PlaneGeometry(48, 32, 150, 84);
   tg.rotateX(-Math.PI / 2);
@@ -218,6 +230,7 @@ export function init() {
   sun.position.set(0, 3.3, -14);
   sc.add(sun);
 
+  await yieldToMain();
   // ---------- per-section objects: each fades with its own weight ----------
   const OBJ: SectionObject[] = [];
   function mk(sec: number, side: number, scl = 1): SectionObject {
@@ -288,6 +301,7 @@ export function init() {
   halo(hero, 6, 760, 1.1);
   hero.g.add(new LineSegments(new WireframeGeometry(new IcosahedronGeometry(1.6, 1)), M(hero, LM(0.5), 0.5)));
 
+  await yieldToMain();
   // about: brain + gears (left)
   const bn = (x: number, y: number, z: number) =>
     Math.sin(x * 1.9 + 1.3) * Math.cos(y * 2.3 - 0.7) +
@@ -319,6 +333,7 @@ export function init() {
   ab.g.add(brain, gA.g);
   halo(ab, 3.6, 420, 0.5);
 
+  await yieldToMain();
   // education: armillary (right)
   const ar = mk(2, 1);
   const armM = M(ar, LM(0.9), 0.9);
@@ -338,6 +353,7 @@ export function init() {
   ar.g.add(orb);
   halo(ar, 3.3, 380, 0.9);
 
+  await yieldToMain();
   // skills: neural net with travelling pulses (left)
   const nn = mk(3, -1, 1.2);
   const edges: [Vector3, Vector3][] = [];
@@ -369,6 +385,7 @@ export function init() {
   pg2.setAttribute("position", new BufferAttribute(pa, 3));
   nn.g.add(new Points(pg2, M(nn, PM(0.2, 1), 1)));
 
+  await yieldToMain();
   // credentials: torus knot + inner knot (right)
   const kn = mk(4, 1);
   const kgm = new TorusKnotGeometry(1.6, 0.4, 150, 14, 2, 3);
@@ -377,12 +394,14 @@ export function init() {
   kn.g.add(kn2);
   halo(kn, 3.2, 360, 0.2);
 
+  await yieldToMain();
   // experience: gears (right)
   const ex = mk(5, 1, 1.15);
   const gB = gearSet(ex);
   ex.g.add(gB.g);
   halo(ex, 3.6, 360, 0.7);
 
+  await yieldToMain();
   // research: DNA helix (left)
   const rs = mk(6, -1);
   const HN = 100;
@@ -410,6 +429,7 @@ export function init() {
   rs.g.add(new Points(BG(hp), M(rs, PM(0.07, 1), 1)));
   halo(rs, 2.4, 260, Math.PI / 2);
 
+  await yieldToMain();
   // projects: floating polyhedra
   const pj = mk(PROJECTS, 0);
   const polyM = M(pj, LM(0.8), 0.8);
@@ -434,6 +454,7 @@ export function init() {
     d[0].dispose();
   });
 
+  await yieldToMain();
   // awards: medal (right)
   const md = mk(8, 1);
   const mdM = M(md, LM(0.9), 0.9);
@@ -460,6 +481,7 @@ export function init() {
   });
   halo(md, 2.8, 320, 1.3);
 
+  await yieldToMain();
   // contact: living particle blob (right)
   const bo = mk(9, 1);
   const BN = q(5400);
@@ -530,6 +552,11 @@ export function init() {
     const w = sm(i - 0.12, i + 0.12, s) * (1 - sm(i + 0.88, i + 1.12, s));
     return i === PROJECTS ? Math.max(mob ? 0.12 : 0.28, w) : w;
   };
+
+  // Compile every shader before the first frame, without blocking (parallel compile where supported).
+  await yieldToMain();
+  await R.compileAsync(sc, cam);
+  await yieldToMain();
 
   const t0 = performance.now();
   let raf = 0;

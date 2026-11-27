@@ -6,7 +6,7 @@ export const site = {
   jobTitle: "AI/ML Engineer",
   description: "Portfolio of Krithik Naidu: AI/ML engineer building LLM-powered and agentic systems.",
   ogDescription: "LLM-powered and agentic systems, edge AI research and hackathon-winning products.",
-  // TODO: replace with the live Vercel domain (also set `site` in astro.config.mjs).
+  // Live domain (also set as `site` in astro.config.mjs).
   url: "https://krithik-naidu.vercel.app",
   email: "krithiknaidu44@gmail.com",
   linkedin: "https://www.linkedin.com/in/krithik-naidu-579400350/",

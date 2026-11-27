@@ -7,10 +7,20 @@ export function measure() {
   tops.push(document.documentElement.scrollHeight);
 }
 
+// Re-measure at most once per frame (each measure forces a layout).
+let queued = false;
+const scheduleMeasure = () => {
+  if (queued) return;
+  queued = true;
+  requestAnimationFrame(() => {
+    queued = false;
+    measure();
+  });
+};
 measure();
-addEventListener("resize", measure);
-addEventListener("load", measure);
-if ("ResizeObserver" in window) new ResizeObserver(measure).observe(document.body);
+addEventListener("resize", scheduleMeasure, { passive: true });
+addEventListener("load", scheduleMeasure);
+if ("ResizeObserver" in window) new ResizeObserver(scheduleMeasure).observe(document.body);
 
 /** Index of the section under the middle of the viewport, plus fractional progress through it. */
 export function sectionAt(y = scrollY) {

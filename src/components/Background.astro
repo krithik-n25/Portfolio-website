@@ -1,0 +1,16 @@
+---
+// Fixed background layers. The Three.js scene and the 2D constellation start after the
+// loader, on idle, so they never compete with first paint.
+---
+<canvas id="c" aria-hidden="true"></canvas>
+<div class="vig"></div>
+<script>
+  import { afterLoader, whenIdle, reduceMotion } from "../scripts/lib/env";
+
+  afterLoader(() =>
+    whenIdle(() => {
+      import("../scripts/background").then((m) => m.init()).catch(() => {});
+      if (!reduceMotion) import("../scripts/constellation").then((m) => m.homeConstellation());
+    }),
+  );
+</script>

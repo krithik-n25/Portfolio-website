@@ -5,5 +5,21 @@
   "version": "1.0.0",
   "devDependencies": {
     "playwright": "^1.65.1"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.6",
+    "astro": "^6.4.8",
+    "sharp": "^0.35.5",
+    "three": "^0.187.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "shots": "node tools/screenshots.mjs",
+    "loader-timing": "node tools/loader-timing.mjs"
+  },
+  "overrides": {
+    "sharp": "$sharp"
   }
 }

@@ -13,7 +13,9 @@ const VIEWPORTS = [
   { name: "390x844", width: 390, height: 844, touch: true },
 ];
 const SECTIONS = ["home", "about", "education", "skills", "credentials", "experience", "research", "projects", "awards", "contact"];
-const HIDE_RANDOM = `canvas#c, #bg3d, canvas#cn5, #cn5, canvas#bgc { visibility: hidden !important; }`;
+// Static mode also freezes the two endless decorative animations (panel edge light, card float),
+// whose phase depends on capture timing.
+const HIDE_RANDOM = `canvas#c, canvas#cn5, #cn5, canvas#bgc { visibility: hidden !important; } .edge, .pc .art svg { animation: none !important; }`;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 

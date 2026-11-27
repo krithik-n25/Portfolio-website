@@ -1,0 +1,27 @@
+---
+import { site } from "../data/site";
+---
+<div id="ld">
+  <div class="h t"></div>
+  <div class="h b"></div>
+  <canvas aria-hidden="true"></canvas>
+  <div class="seam"></div>
+  <div class="tl">{site.name} — Portfolio</div>
+  <div class="br">© {site.year}</div>
+  <div class="c">
+    <div class="wrap" aria-hidden="true">
+      <svg viewBox="-100 -100 200 200">
+        <g class="r1"><circle r="94" stroke-dasharray="1.5 7"></circle></g>
+        <g class="r2"><ellipse rx="94" ry="36"></ellipse><circle cx="94" r="3" fill="#fff" stroke="none"></circle></g>
+        <g transform="rotate(60)"><g class="r3"><ellipse rx="94" ry="36"></ellipse><circle cx="-94" r="2.5" fill="#fff" stroke="none"></circle></g></g>
+        <circle r="64" stroke-opacity=".35"></circle>
+      </svg>
+      <div class="mono">KN</div>
+    </div>
+    <div class="n" aria-hidden="true">00</div>
+    <div class="s" role="status" aria-live="polite">Mapping terrain</div>
+  </div>
+</div>
+<script>
+  import "../scripts/loader.ts";
+</script>

@@ -1,0 +1,438 @@
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--t);
+  font: 400 14.2px/1.72 var(--ui);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  counter-reset: s;
+}
+
+body.lock,
+body.mopen {
+  overflow: hidden;
+}
+
+:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* Programmatic focus target after the loader; never shows a ring. */
+#home:focus {
+  outline: none;
+}
+
+/* Three.js background. Fades in once the scene is ready; the hero stands on its own without it. */
+canvas#c {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.8s;
+}
+
+canvas#c.on {
+  opacity: 1;
+}
+
+.vig {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 50% 50%, transparent 45%, rgba(8, 8, 8, 0.55) 100%);
+}
+
+/* 2D constellation layer above the 3D scene. */
+#cn5 {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  transition: opacity 0.8s;
+}
+
+/* Calmer background while the Projects section is on screen. */
+#dim7 {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: rgba(34, 34, 34, 0.5);
+  opacity: 0;
+  transition: opacity 0.8s;
+}
+
+body.pj #dim7 {
+  opacity: 1;
+}
+
+body.pj #cn5 {
+  opacity: 0.35;
+}
+
+.prog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  z-index: 95;
+  background: #fff;
+  transform: scaleX(0);
+  transform-origin: left;
+  box-shadow: 0 0 12px #fff;
+}
+
+/* Cursor ring. Positioned with transform from cursor.ts; size changes stay on width/height as before. */
+.ring {
+  position: fixed;
+  z-index: 90;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1.5px solid #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  left: 0;
+  top: 0;
+  transform: translate3d(-60px, -60px, 0);
+  transition:
+    width 0.25s,
+    height 0.25s,
+    margin 0.25s,
+    background 0.25s;
+  mix-blend-mode: difference;
+}
+
+.ring.big {
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  background: #fff;
+}
+
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 70;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(22px + env(safe-area-inset-top, 0px)) 3.4vw 14px;
+  pointer-events: none;
+}
+
+nav > * {
+  pointer-events: auto;
+}
+
+.logo {
+  font: 700 24px var(--disp);
+  letter-spacing: 0.2em;
+  color: #fff;
+  text-decoration: none;
+  text-shadow: 0 0 12px #000;
+}
+
+.burger {
+  width: 46px;
+  height: 44px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  display: grid;
+  align-content: center;
+  gap: 7px;
+  padding: 0;
+}
+
+.burger i {
+  display: block;
+  height: 2px;
+  background: #fff;
+  transition: 0.35s;
+  box-shadow: 0 0 8px #000;
+}
+
+.burger i:nth-child(2) {
+  width: 70%;
+  margin-left: auto;
+}
+
+body.mopen .burger i:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+body.mopen .burger i:nth-child(2) {
+  opacity: 0;
+}
+
+body.mopen .burger i:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+.mnu {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition:
+    opacity 0.45s,
+    visibility 0.45s;
+  overflow-y: auto;
+  padding: 80px 0 40px;
+}
+
+body.mopen .mnu {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.mnu a {
+  font: 600 clamp(1.5rem, 3.8vw, 2.5rem) var(--disp);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+  padding: 5px 14px;
+  transition: 0.3s;
+  display: flex;
+  gap: 18px;
+  align-items: baseline;
+}
+
+.mnu a small {
+  font: 500 11px var(--ui);
+  letter-spacing: 0.2em;
+  color: var(--d);
+}
+
+.mnu a:hover,
+.mnu a[aria-current] {
+  letter-spacing: 0.4em;
+}
+
+.dots {
+  position: fixed;
+  right: 2.2vw;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 60;
+  display: grid;
+  gap: 12px;
+}
+
+.dots button {
+  position: relative;
+  width: 44px;
+  height: 22px;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.dots button::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+  transition: 0.3s;
+  box-shadow: 0 0 8px #000;
+}
+
+.dots button.on::before {
+  background: #fff;
+  transform: scale(1.4);
+}
+
+.dots button span {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  font: 600 10px var(--ui);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s;
+  background: var(--bg);
+  padding: 4px 9px;
+  border: 1px solid var(--l2);
+  border-radius: 999px;
+}
+
+.dots button:hover span,
+.dots button:focus-visible span {
+  opacity: 1;
+}
+
+.cnt {
+  position: fixed;
+  right: 3.4vw;
+  bottom: calc(3.6vh + env(safe-area-inset-bottom, 0px));
+  z-index: 60;
+  font: 500 11px var(--ui);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px #000;
+}
+
+.snd {
+  position: fixed;
+  left: 3.4vw;
+  bottom: calc(3.6vh + env(safe-area-inset-bottom, 0px));
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+  font: italic 500 15px var(--disp);
+  padding: 10px 0;
+  text-shadow: 0 0 10px #000;
+}
+
+.snd i {
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid #fff;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.snd i::after {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0.35;
+}
+
+.snd.on i::after {
+  opacity: 1;
+  animation: pu 1.4s ease-in-out infinite;
+}
+
+@keyframes pu {
+  50% {
+    transform: scale(1.9);
+  }
+}
+
+section {
+  position: relative;
+  z-index: 5;
+  padding: 0 6vw;
+}
+
+section[data-s] {
+  counter-increment: s;
+}
+
+.sec {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 12vh;
+  padding-bottom: 8vh;
+}
+
+footer {
+  position: relative;
+  z-index: 5;
+  border-top: 1px solid var(--l1);
+  padding: 22px 6vw 28px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  font: 500 11px var(--ui);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--d);
+  background: var(--bg);
+}
+
+.rv {
+  opacity: 0;
+  transform: translateY(34px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease);
+}
+
+.rv.in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 900px) {
+  .dots,
+  .cnt {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rv {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  #cn5 {
+    display: none;
+  }
+}
+
+@media (hover: none) {
+  .ring {
+    display: none;
+  }
+}

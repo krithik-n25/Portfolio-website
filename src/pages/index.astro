@@ -1,0 +1,80 @@
+---
+import Base from "../layouts/Base.astro";
+import Background from "../components/Background.astro";
+import Nav from "../components/Nav.astro";
+import Hero from "../components/Hero.astro";
+import Section from "../components/Section.astro";
+import Panel from "../components/Panel.astro";
+import SplitTitle from "../components/SplitTitle.astro";
+import Chips from "../components/Chips.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import ProjectDetail from "../components/ProjectDetail.astro";
+import { site } from "../data/site";
+import { education } from "../data/education";
+import { skills } from "../data/skills";
+import { certifications } from "../data/certifications";
+import { activities } from "../data/activities";
+import { experience } from "../data/experience";
+import { research } from "../data/research";
+import { awards } from "../data/awards";
+import { projects, initialProject } from "../data/projects";
+
+const sections = [
+  { id: "home", name: "Home" },
+  { id: "about", name: "About" },
+  { id: "education", name: "Education" },
+  { id: "skills", name: "Skills" },
+  { id: "credentials", name: "Credentials" },
+  { id: "experience", name: "Experience" },
+  { id: "research", name: "Research" },
+  { id: "projects", name: "Projects" },
+  { id: "awards", name: "Awards" },
+  { id: "contact", name: "Contact" },
+];
+const pad = (n: number) => (n < 10 ? "0" : "") + n;
+---
+<Base page="home" title={site.title} description={site.description} path="/">
+  <Background />
+  <Nav sections={sections} />
+  <main id="app">
+    <Hero />
+    <Section id="about" name="About">
+      <Panel side="pr" width="w1" title="About"><p>I’m {site.name}, a Computer Science &amp; Engineering student in {site.city} and an AI/ML Engineer Intern. I enjoy turning research ideas into software that people can really use, with a focus on LLM applications, agentic AI and efficient deep learning.</p><p style="margin:0">Scroll on for my education, skills, credentials, experience, research and projects.</p></Panel>
+    </Section>
+    <Section id="education" name="Education">
+      <Panel side="pl" width="w2" title="Education">{education.map((e) => <div class="ed"><time>{e.period}</time><div><b>{e.degree}</b><span>{e.school}</span><em>{e.score}</em></div></div>)}</Panel>
+    </Section>
+    <Section id="skills" name="Skills">
+      <Panel side="pr" width="w2" title="Skills"><div class="sk">{skills.map((s) => <div><h4>{s.group}</h4><Chips items={s.items} /></div>)}</div></Panel>
+    </Section>
+    <Section id="credentials" name="Credentials">
+      <Panel side="pl" width="w3" title="Certifications & Activities"><div class="two"><div><h3 class="lbl">Certifications</h3><div class="lst">{certifications.map((c) => <div><p>{c.name}</p><span>{c.year}</span></div>)}</div></div><div><h3 class="lbl">Extracurricular activities</h3>{activities.map((a) => <div class="act"><time>{a.date}</time><b>{a.name}</b><span>{a.detail}</span></div>)}</div></div></Panel>
+    </Section>
+    <Section id="experience" name="Experience">
+      <Panel side="pl" width="w2" title="Experience">{experience.map((e) => <div class="xp"><div class="dt">{e.period}</div><h3>{e.role}</h3><span class="org">{e.org}</span><ul>{e.points.map((pt) => <li>{pt}</li>)}</ul>{e.tags && <Chips items={e.tags} />}</div>)}</Panel>
+    </Section>
+    <Section id="research" name="Research">
+      <Panel side="pr" width="w2" title="Research Experience">{research.map((r) => <div class="xp"><span class="stt">{r.status}</span><div class="dt">{r.period}</div><h3>{r.title}</h3><span class="org">{r.org}</span><ul>{r.points.map((pt) => <li>{pt}</li>)}</ul><Chips items={r.tags} /></div>)}</Panel>
+    </Section>
+    <Section id="projects" name="Projects" variant="proj">
+      <SplitTitle text="Projects" class="ttl rv" style="align-self:center" /><p class="q rv">Systems built around agents, retrieval, healthcare access and the energy grid. Click a card to read the full story.</p><div class="stage rv" id="stage" data-start={initialProject}>{projects.map((p, i) => <ProjectCard project={p} index={i} />)}</div><div class="nav2"><button id="pv" aria-label="Previous project">←</button><span id="pn">{pad(initialProject + 1)} / {pad(projects.length)}</span><button id="nx" aria-label="Next project">→</button></div>
+    </Section>
+    <Section id="awards" name="Awards">
+      <Panel side="pl" width="w1" title="Awards">{awards.map((a) => <div class="aw"><i>{a.no}</i><div><b>{a.title}</b><span>{a.detail}</span></div></div>)}</Panel>
+    </Section>
+    <Section id="contact" name="Contact" variant="cta">
+      <div class="cx rv"><p class="eb">Let’s connect</p><h2 class="big" aria-label="Let’s build something intelligent"><span>LET’S BUILD</span><span>SOMETHING</span><em>INTELLIGENT</em></h2><p class="sb">Agents, retrieval, edge AI and products people actually use. Tell me what you’re building.</p><button class="mail" id="cp" type="button" data-email={site.email}>{site.email}<span>Copy</span></button><div class="btns"><a href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a><a href={site.github} target="_blank" rel="noopener">GitHub</a><a href={`mailto:${site.email}`}>Email</a><a class="solid" href="/contact.html">Let’s talk →</a></div></div>
+    </Section>
+  </main>
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Project details"><div class="mc" id="mc"></div></div>
+  <button class="mx" id="mx" aria-label="Close">×</button>
+  <canvas id="cn5" aria-hidden="true"></canvas>
+  <div id="dim7"></div>
+  {projects.map((p, i) => <ProjectDetail project={p} index={i} />)}
+  <script>
+    import "../scripts/reveal.ts";
+    import "../scripts/panels.ts";
+    import "../scripts/carousel.ts";
+    import "../scripts/contact.ts";
+  </script>
+</Base>

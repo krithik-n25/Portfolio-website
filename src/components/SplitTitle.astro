@@ -1,0 +1,10 @@
+---
+// Section title split into per-letter spans at build time (the reveal animates each letter).
+interface Props {
+  text: string;
+  class?: string;
+  style?: string;
+}
+const { text, class: cls = "ttl", style } = Astro.props;
+---
+<h2 class={cls} style={style} aria-label={text}>{[...text].map((ch, k) => <span class="lt" aria-hidden="true" style={`--k:${k}`}>{ch}</span>)}</h2>

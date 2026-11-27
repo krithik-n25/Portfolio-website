@@ -1,7 +1,7 @@
 // Usage: node tools/loader-timing.mjs <url> [runs]
 // Measures loader milestones (ms since navigation start):
 //   exitStart   – #ld gets class "out"
-//   interactive – body loses class "ld" (scroll unlocked, page usable)
+//   interactive – body/html loses class "ld" (scroll unlocked, page usable)
 //   gone        – #ld hidden (.gone) or removed from the DOM
 // Runs unthrottled and with Slow 4G + 4x CPU slowdown.
 import { chromium } from "playwright";
@@ -16,8 +16,10 @@ const probe = () => {
   new MutationObserver(() => {
     const ld = document.getElementById("ld");
     if (ld && ld.classList.contains("out")) mark("exitStart");
-    if (document.body && t.sawLd && !document.body.classList.contains("ld")) mark("interactive");
-    if (document.body && document.body.classList.contains("ld")) t.sawLd = true;
+    // Legacy locks with body.ld, the new build with html.ld.
+    const locked = document.documentElement.classList.contains("ld") || !!document.body?.classList.contains("ld");
+    if (t.sawLd && !locked) mark("interactive");
+    if (locked) t.sawLd = true;
     if (t.sawEl && (!ld || ld.classList.contains("gone"))) mark("gone");
     if (ld) t.sawEl = true;
   }).observe(document, { subtree: true, childList: true, attributes: true, attributeFilter: ["class"] });

@@ -97,7 +97,7 @@ A MutationObserver on `#cnt` replays a 1px full-width wipe on each section chang
 - Image paths `assets/agentic-whiteboard/*` exist and load. They are only requested when the Agentic Whiteboard modal opens, so none of them are in the LCP path. The hero LCP is text (the loader number while the loader is up).
 - Three.js npm (current) vs r128: since r152 the renderer converts output to sRGB and enables colour management, which would brighten the grey motes and alter alpha blending. To stay visually identical I'll set `ColorManagement.enabled = false` and `outputColorSpace = LinearSRGBColorSpace`. WebGL1 is no longer supported by current three (WebGL2 only); the legacy shaders (`attribute`/`varying`/`gl_FragColor`) still compile because three injects the compatibility defines.
 
-## 6. Questions for you (blocking Phase 2)
+## 6. Questions asked before Phase 2
 
 1. OK to delete the dead items marked **Ask** in section 4?
 2. Keep the `#cn5` constellation canvas and the ambient sound button? (Both visible, neither in the brief's list. My plan: keep both, start `#cn5` after the loader with the Three.js idle init and make its line loop cheaper with a spatial grid so it looks the same.)
@@ -105,3 +105,31 @@ A MutationObserver on `#cnt` replays a 1px full-width wipe on each section chang
 4. Contact page: there is no copy-email button there today. Keep it that way (my recommendation; adding one changes the design), or add one?
 5. Site URL for canonical, Open Graph and sitemap? And host: Vercel or GitHub Pages?
 6. Agentic Whiteboard live demo URL, or keep it hidden?
+
+### Answers (2026-11-27)
+
+1. Dead code: delete it all. Done.
+2. Constellation `#cn5` and sound button: keep both, optimised. The constellation now starts after the loader, finds neighbours with a spatial grid and batches its link lines into 16 alpha buckets (at most 16 strokes per frame). The AudioContext is still created only on click.
+3. Contact page: keep as is (no copy button). Email and links come from `src/data/site.ts`.
+4. Host: Vercel (already live). The live domain is still needed for `site` in `astro.config.mjs` and `url` in `src/data/site.ts`; the placeholder is `https://krithik-naidu.vercel.app`.
+
+Defaults I applied without asking (say if you want them changed):
+- Reduced-motion counters: the guard is back (counters show the final value instantly).
+- Agentic Whiteboard live demo: still hidden until `demo` in `src/data/projects.ts` is a real URL.
+- Closing the project modal returns focus to the card that opened it (the shipped legacy code lost this).
+- The copy button also falls back to `mailto:` when the clipboard promise rejects, not only when it throws.
+
+## 7. Decisions made during the port
+
+- **Astro 6.4.8, not 7.x.** Astro 7 requires Node 22.23.4+; this machine has 22.19.0. The code uses nothing version specific; upgrade Node, then `npm i astro@latest`. Note `npm audit` reports advisories against Astro 6 (mostly SSR/island/adapter issues that do not apply to a static build); upgrading to 7 clears them.
+- **`sharp` override.** Astro bundled its own older sharp (0.34.5, flagged by `npm audit`); `overrides` in `package.json` makes it use the top-level 0.35.5.
+- **Italic 600 on the home page is synthesised on purpose.** The legacy home page never loaded a 600 italic face, so Chrome faked it from 500 italic for "INTELLIGENT" and the email button. To stay identical, the home page declares the italic face at weight 500 only. The contact page did load real 600 italic and still does.
+- **₹ glyph.** Legacy pulled an 85 KB Inter latin-ext file just for "₹25,000". It is now a 1.2 KB single-glyph subset.
+- **Loader state lives on `<html>`** (`html.ld`, `html.noload`) instead of `body.ld`, because it has to be set by a tiny inline script in `<head>` before the body exists.
+- **The home stylesheet loads without blocking render** (`preload` + `onload`, `<noscript>` fallback) so the inline loader paints first. The loader waits for that stylesheet before revealing the page. On a repeat visit in the same session a plain `#222` cover fades out as soon as the (cached) stylesheet is in. The contact page has no loader, so its 8 KB stylesheet stays render-blocking.
+- **The 3D canvas fades in** (`opacity` 0 → 1 over 0.8s) once the first frame renders. The body is the same `#222` underneath, so the hero looks finished without it.
+- **Cursor ring** moves with `transform` in its own rAF loop that stops when the ring has caught up, instead of `left/top` inside the Three.js loop.
+- **Panel `!important`s removed** except two: `.lst p` (kept as written; harmless) and `transition-delay` on `.panel.live` (it has to beat the inline reveal stagger). The edge/corner `!important`s were only fighting the reveal rule; the reveal selector now excludes them with `:not(.ttl, .edge, .cn)`, same specificity.
+- **"Pause when the canvas is off screen":** the canvas is `position: fixed` and full-viewport, so it is never off screen. Instead the loop pauses when the tab is hidden and while a project modal (96% opaque) covers it.
+- **`articles.ts` not created.** `ART` in the legacy file held the card SVG artwork, not articles; each SVG now lives with its project in `projects.ts`.
+- **URLs unchanged:** `build.format: "file"` emits `index.html` and `contact.html`.

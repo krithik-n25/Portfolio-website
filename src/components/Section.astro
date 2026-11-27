@@ -1,0 +1,10 @@
+---
+// Full-height section (was the S() helper). `name` feeds the nav menu, dot rail and counter.
+interface Props {
+  id: string;
+  name: string;
+  variant?: string;
+}
+const { id, name, variant = "gs" } = Astro.props;
+---
+<section class={`sec ${variant}`} id={id} data-s data-n={name}><slot /></section>

@@ -1,0 +1,8 @@
+---
+// Tag chips. Rendered with no whitespace between them, like the original string-built markup.
+interface Props {
+  items: string[];
+}
+const { items } = Astro.props;
+---
+{items.map((c) => <span class="chip">{c}</span>)}

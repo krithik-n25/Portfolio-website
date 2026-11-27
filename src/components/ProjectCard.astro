@@ -1,0 +1,9 @@
+---
+import type { Project } from "../data/projects";
+interface Props {
+  project: Project;
+  index: number;
+}
+const { project: p, index } = Astro.props;
+---
+<div class="pc" tabindex="0" role="button" data-i={index} aria-label={`${p.title} — ${p.tag}`}><div class="art" aria-hidden="true" set:html={p.art} /><div class="in"><h3>{p.title}</h3><p>{p.tag}</p></div><div class="v">View project</div></div>

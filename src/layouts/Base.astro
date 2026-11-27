@@ -1,0 +1,94 @@
+---
+// Shared document shell: head/meta, fonts, critical CSS, and the stylesheet for the page.
+// Home: the main stylesheet loads without blocking render while the inline loader (or, on a
+// repeat visit, a plain cover) hides the page, so there is no flash of unstyled content.
+// Contact: no loader, so its small stylesheet stays render-blocking.
+import loaderCss from "../styles/loader.css?raw";
+import homeCss from "../styles/home.css?url";
+import contactCss from "../styles/contact-page.css?url";
+import Loader from "../components/Loader.astro";
+import Footer from "../components/Footer.astro";
+import { site } from "../data/site";
+
+interface Props {
+  page: "home" | "contact";
+  title: string;
+  description: string;
+  path: string;
+}
+const { page, title, description, path } = Astro.props;
+const css = page === "home" ? homeCss : contactCss;
+// Without JS: load the stylesheet, hide the loader and show everything the reveal script would.
+// (Rendered from a string: Astro's compiler does not keep expressions inside <noscript>.)
+const noscript =
+  page === "home"
+    ? `<link rel="stylesheet" href="${css}"><style>#ld{display:none}` +
+      `.rv,.lt,.panel>*:not(.edge,.cn),.ed,.xp,.act,.aw,.lst>div,.sk>div,.big>*{opacity:1!important;transform:none!important;filter:none!important;clip-path:none!important}` +
+      `.ttl::after{width:calc(100% - .3em)!important}</style>`
+    : `<style>.rv{opacity:1!important;transform:none!important}</style>`;
+const canonical = new URL(path, site.url).href;
+const ogImage = new URL("/og.jpg", site.url).href;
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  jobTitle: site.jobTitle,
+  url: site.url,
+  email: `mailto:${site.email}`,
+  address: { "@type": "PostalAddress", addressLocality: site.city, addressCountry: "IN" },
+  sameAs: [site.linkedin, site.github],
+};
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#222222" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={page === "home" ? site.ogDescription : description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name}, ${site.role}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={page === "home" ? site.ogDescription : description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <link rel="preload" href="/fonts/cormorant-garamond-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+    {page === "contact" && <link rel="preload" href="/fonts/cormorant-garamond-italic-latin.woff2" as="font" type="font/woff2" crossorigin />}
+    {
+      page === "home" && (
+        <>
+          {/* Decide before first paint: full loader, or the short cover on a repeat visit this session. */}
+          <script is:inline>
+            (function(){var d=document.documentElement,s=false;try{s=sessionStorage.getItem("kn-ld")==="1"}catch(e){}d.classList.add("ld");if(s)d.classList.add("noload")})();
+          </script>
+          <style is:inline set:html={loaderCss} />
+        </>
+      )
+    }
+    {
+      page === "home" ? (
+        <link rel="preload" as="style" href={css} data-main-css onload="this.onload=null;this.rel='stylesheet'" />
+      ) : (
+        <link rel="stylesheet" href={css} />
+      )
+    }
+    <Fragment set:html={`<noscript>${noscript}</noscript>`} />
+  </head>
+  <body>
+    {page === "home" && <Loader />}
+    <slot />
+    <Footer />
+  </body>
+</html>

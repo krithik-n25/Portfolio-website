@@ -1,0 +1,8 @@
+---
+// Metric tiles; carousel.ts animates the <b data-v> values when the modal opens.
+interface Props {
+  rows: [string, string][];
+}
+const { rows } = Astro.props;
+---
+<div class="mets">{rows.map(([v, label]) => <div><b data-v={v}>{v}</b><span>{label}</span></div>)}</div>

@@ -1,0 +1,64 @@
+---
+import Base from "../layouts/Base.astro";
+import { site } from "../data/site";
+---
+<Base
+  page="contact"
+  title={`Let’s talk — ${site.name}`}
+  description={`Get in touch with ${site.name}: research collaboration, internships, or an idea to build together.`}
+  path="/contact.html"
+>
+  <canvas id="bgc" aria-hidden="true"></canvas><div class="vig"></div><div class="ring" id="ring" data-hover="a,button"></div>
+  <nav><a class="logo" href="/" aria-label="Back to portfolio home">KN</a><a class="back" href="/">← Portfolio</a></nav>
+  <main>
+    <p class="eb">Get in touch</p>
+    <h1 class="big" aria-label="Let’s talk"><span>LET’S</span> <em>TALK</em></h1>
+    <p class="sb">Research collaboration, an internship, or an idea you’d like to build together? Send a note below and I’ll get back to you.</p>
+    <div class="panel rv" id="pn">
+      <i class="edge"></i><i class="cn a"></i><i class="cn b"></i><i class="cn c"></i><i class="cn d"></i>
+      <h2 class="ttl">Say hello</h2>
+      <p>Fill in your name, email and message. It takes under a minute.</p>
+      <div class="frame">
+        <div class="ld" id="gf-ld">Loading form…</div>
+        <iframe id="gf" title="Contact form" loading="lazy" src={`${site.googleForm}?embedded=true`}>Loading…</iframe>
+      </div>
+      <p class="alt">Form not loading? <a href={site.googleForm} target="_blank" rel="noopener">Open it in a new tab</a>.</p>
+    </div>
+    <div class="btns rv">
+      <a class="solid" href={`mailto:${site.email}`}>Email me</a>
+      <a href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a>
+      <a href={site.github} target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </main>
+  <script>
+    import { $$, reduceMotion, touch } from "../scripts/lib/env";
+    import "../scripts/cursor.ts";
+    import "../scripts/contact.ts";
+
+    const io = new IntersectionObserver(
+      (es) =>
+        es.forEach((e) => {
+          if (!e.isIntersecting) return;
+          e.target.classList.add("in");
+          io.unobserve(e.target);
+        }),
+      { threshold: 0.06 },
+    );
+    $$(".rv").forEach((el) => io.observe(el));
+
+    if (!touch && !reduceMotion)
+      for (const b of $$(".btns a,.back,.logo")) {
+        b.addEventListener(
+          "pointermove",
+          (e) => {
+            const r = b.getBoundingClientRect();
+            b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.22}px,${(e.clientY - r.top - r.height / 2) * 0.3}px)`;
+          },
+          { passive: true },
+        );
+        b.addEventListener("pointerleave", () => (b.style.transform = ""));
+      }
+
+    if (!reduceMotion) import("../scripts/constellation").then((m) => m.contactConstellation());
+  </script>
+</Base>

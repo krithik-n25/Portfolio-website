@@ -1,0 +1,22 @@
+---
+// Fixed chrome: scroll progress, cursor ring, top bar, full-screen menu, dot rail,
+// section counter and the ambient sound toggle. Menu and rail are rendered from the section list.
+interface Props {
+  sections: { id: string; name: string }[];
+}
+const { sections } = Astro.props;
+const pad = (n: number) => (n < 10 ? "0" : "") + n;
+const total = pad(sections.length);
+---
+<div class="prog" id="prog"></div>
+<div class="ring" id="ring" data-hover="a,button,.pc,input,textarea"></div>
+<nav><a class="logo" href="#home" aria-label="Home">KN</a><button class="burger" id="bg" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i></i><i></i><i></i></button></nav>
+<div class="mnu" id="menu">{sections.map((s, i) => <a href={`#${s.id}`} aria-current={i === 0 ? "true" : undefined}><small>{pad(i + 1)}</small>{s.name}</a>)}</div>
+<div class="dots" id="dots">{sections.map((s, i) => <button data-i={i} aria-label={s.name} class={i === 0 ? "on" : undefined}><span>{s.name}</span></button>)}</div>
+<div class="cnt" id="cnt">01 / {total} · {sections[0].name}</div>
+<button class="snd" id="snd" type="button"><i></i><span id="sndt">Click to enable sound</span></button>
+<script>
+  import "../scripts/nav.ts";
+  import "../scripts/cursor.ts";
+  import "../scripts/sound.ts";
+</script>

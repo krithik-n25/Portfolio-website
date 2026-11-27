@@ -1,0 +1,754 @@
+.ttl {
+  position: relative;
+  font: 600 clamp(1.45rem, 3vw, 2.3rem)/1.1 var(--disp);
+  letter-spacing: 0.3em;
+  margin-right: -0.3em;
+  text-transform: uppercase;
+  margin-bottom: 22px;
+  color: #fff;
+  display: inline-block;
+  padding-bottom: 14px;
+  border-bottom: 0;
+  text-shadow: 0 0 14px #000;
+  align-self: flex-start;
+}
+
+.lbl {
+  font: 600 11px var(--ui);
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 14px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--l1);
+}
+
+.panel {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03) 42%, rgba(0, 0, 0, 0.3)),
+    rgba(8, 8, 8, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 26px;
+  padding: clamp(22px, 2.6vw, 38px);
+  backdrop-filter: blur(22px) saturate(1.2);
+  -webkit-backdrop-filter: blur(22px) saturate(1.2);
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    inset 0 0 0 7px rgba(255, 255, 255, 0.025);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.w1 {
+  max-width: 560px;
+}
+
+.w2 {
+  max-width: 720px;
+}
+
+.w3 {
+  max-width: 880px;
+}
+
+.pl {
+  align-self: flex-start;
+}
+
+.pr {
+  align-self: flex-end;
+}
+
+.panel p {
+  margin: 0 0 16px;
+  color: #fff;
+  text-shadow: 0 0 10px #000;
+}
+
+.ed {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  gap: 6px 24px;
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.26);
+}
+
+/* Never matches inside panels (the edge/corner elements come last), kept for parity. */
+.ed:last-child {
+  border-bottom: 0;
+}
+
+.ed time {
+  color: var(--d);
+  font-size: 13px;
+  padding-top: 5px;
+}
+
+.ed b {
+  color: #fff;
+  font: 600 20px/1.2 var(--disp);
+  display: block;
+}
+
+.ed span {
+  color: var(--d);
+  font-size: 13px;
+  display: block;
+  margin-top: 3px;
+}
+
+.ed em,
+.stt {
+  font: 600 11px var(--ui);
+  font-style: normal;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #000;
+  background: #fff;
+  display: inline-block;
+  padding: 4px 14px;
+  margin-top: 10px;
+  border-radius: 999px;
+}
+
+.sk {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 34px;
+}
+
+.sk h4 {
+  margin: 0 0 8px;
+  font: 600 11px var(--ui);
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--l1);
+}
+
+.chip {
+  display: inline-block;
+  font-size: 11.5px;
+  padding: 4px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  margin: 0 5px 6px 0;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  transition:
+    background 0.25s,
+    color 0.25s,
+    transform 0.25s,
+    box-shadow 0.25s;
+}
+
+.chip:hover {
+  background: #fff;
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -8px rgba(255, 255, 255, 0.5);
+}
+
+.two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5vw;
+}
+
+.lst div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.26);
+  font-size: 13px;
+}
+
+.lst div span {
+  color: var(--d);
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+
+.lst p {
+  margin: 0 !important;
+  text-shadow: none !important;
+}
+
+.act {
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 2px 14px;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.26);
+  font-size: 13px;
+}
+
+.act time {
+  color: var(--d);
+  font-size: 12px;
+  padding-top: 3px;
+}
+
+.act b {
+  font-weight: 500;
+}
+
+.act span {
+  grid-column: 2;
+  color: var(--d);
+  line-height: 1.5;
+}
+
+/* Experience/research timeline entries. */
+.xp {
+  position: relative;
+  padding: 20px 0 20px 26px;
+  border-bottom: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.55);
+  margin-left: 5px;
+}
+
+/* Never matches inside panels (see .ed:last-child), kept for parity. */
+.xp:last-child {
+  border-bottom: 0;
+  padding-bottom: 6px;
+}
+
+.xp::before {
+  content: "";
+  position: absolute;
+  left: -5px;
+  top: 30px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1.5px solid #fff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
+  transition: 0.4s;
+}
+
+.xp:hover::before {
+  background: #fff;
+  box-shadow:
+    0 0 0 6px rgba(255, 255, 255, 0.16),
+    0 0 18px #fff;
+  animation: ring5 1.4s infinite;
+}
+
+@keyframes ring5 {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+
+  100% {
+    box-shadow: 0 0 0 12px rgba(255, 255, 255, 0);
+  }
+}
+
+.xp .dt {
+  font: 500 12px var(--ui);
+  letter-spacing: 0.14em;
+  color: var(--d);
+  text-transform: uppercase;
+}
+
+.xp h3 {
+  font: 600 clamp(1.35rem, 2.3vw, 1.85rem)/1.15 var(--disp);
+  margin: 4px 0 3px;
+}
+
+.xp .org {
+  display: block;
+  color: var(--d);
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.xp ul {
+  margin: 0 0 12px;
+  padding-left: 20px;
+  font-size: 13.5px;
+}
+
+.xp li {
+  margin-bottom: 5px;
+}
+
+.stt {
+  margin: 0 0 10px;
+}
+
+.aw {
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.26);
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+/* Never matches inside panels (see .ed:last-child), kept for parity. */
+.aw:last-child {
+  border-bottom: 0;
+}
+
+.aw i {
+  font: 600 34px/1 var(--disp);
+  font-style: normal;
+}
+
+.aw b {
+  display: block;
+  font: 600 20px/1.2 var(--disp);
+}
+
+.aw span {
+  color: var(--d);
+  font-size: 13px;
+}
+
+/* ---------- panel effects ---------- */
+
+/* Cursor spotlight (--px/--py set by panels.ts). */
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s;
+  background: radial-gradient(440px circle at var(--px, 50%) var(--py, 0%), rgba(255, 255, 255, 0.1), transparent 62%);
+}
+
+.panel:hover::before {
+  opacity: 1;
+}
+
+/* One-off shine across the top edge when the panel is revealed. */
+.panel::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent);
+  background-size: 50% 100%;
+  background-repeat: no-repeat;
+  background-position: -60% 0;
+  opacity: 0;
+}
+
+.panel.in::after {
+  animation: shine 2.2s var(--ease) 0.3s 1 forwards;
+}
+
+@keyframes shine {
+  0% {
+    opacity: 1;
+    background-position: -60% 0;
+  }
+
+  100% {
+    opacity: 0.35;
+    background-position: 160% 0;
+  }
+}
+
+.panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.ttl::before {
+  content: counter(s, decimal-leading-zero) "  —  Portfolio";
+  display: block;
+  font: 500 10.5px var(--ui);
+  letter-spacing: 0.34em;
+  color: var(--d);
+  margin-bottom: 12px;
+  text-shadow: none;
+}
+
+.ttl::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 0;
+  background: #fff;
+  transition: width 1.3s var(--ease) 0.35s;
+}
+
+.in .ttl::after,
+.ttl.in::after {
+  width: calc(100% - 0.3em);
+}
+
+/* Staggered reveal of panel content (--i set by reveal.ts). */
+.panel > *:not(.ttl, .edge, .cn),
+.ed,
+.xp,
+.act,
+.aw,
+.lst > div,
+.sk > div {
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(5px);
+  transition:
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease),
+    filter 0.9s var(--ease);
+  transition-delay: calc(var(--i, 0) * 0.075s + 0.25s);
+}
+
+.panel.in > *:not(.ttl, .edge, .cn),
+.panel.in .ed,
+.panel.in .xp,
+.panel.in .act,
+.panel.in .aw,
+.panel.in .lst > div,
+.panel.in .sk > div {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+.ed,
+.act,
+.lst > div,
+.aw {
+  transition:
+    opacity 0.9s var(--ease),
+    transform 0.9s var(--ease),
+    filter 0.9s var(--ease),
+    background 0.3s,
+    padding 0.35s var(--ease);
+}
+
+.ed:hover,
+.act:hover,
+.lst > div:hover,
+.aw:hover {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.06), transparent);
+  padding-left: 12px;
+}
+
+/* Sweeping edge light and corner brackets on every panel. */
+@property --a {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes spin5 {
+  to {
+    --a: 360deg;
+  }
+}
+
+.panel > .edge {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1.5px solid transparent;
+  pointer-events: none;
+  z-index: 2;
+  background: conic-gradient(from var(--a), transparent 0 60%, rgba(255, 255, 255, 0.95) 80%, transparent 92%) border-box;
+  -webkit-mask:
+    linear-gradient(#000 0 0) padding-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: spin5 7s linear infinite;
+  opacity: 0.9;
+}
+
+.panel > .cn {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 0 solid #fff;
+  z-index: 2;
+  opacity: 0.85;
+  pointer-events: none;
+  transition:
+    width 0.4s,
+    height 0.4s;
+}
+
+.cn.a {
+  top: 13px;
+  left: 13px;
+  border-top-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+.cn.b {
+  top: 13px;
+  right: 13px;
+  border-top-width: 1.5px;
+  border-right-width: 1.5px;
+}
+
+.cn.c {
+  bottom: 13px;
+  left: 13px;
+  border-bottom-width: 1.5px;
+  border-left-width: 1.5px;
+}
+
+.cn.d {
+  bottom: 13px;
+  right: 13px;
+  border-bottom-width: 1.5px;
+  border-right-width: 1.5px;
+}
+
+.panel:hover > .cn {
+  width: 30px;
+  height: 30px;
+}
+
+/* 3D tilt + scroll parallax once a panel is revealed (panels.ts). The delay override
+   beats the inline reveal stagger, so it needs !important. */
+.panel.live {
+  transform: perspective(1200px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translate3d(0, var(--ty, 0px), 0);
+  transition:
+    transform 0.35s var(--ease),
+    opacity 0.4s;
+  transition-delay: 0s !important;
+  will-change: transform;
+}
+
+/* Per-letter title reveal. */
+.lt {
+  display: inline-block;
+  white-space: pre;
+  opacity: 0;
+  transform: translateY(0.7em) rotateX(-80deg);
+  transform-origin: 50% 100%;
+  transition:
+    opacity 0.8s var(--ease),
+    transform 0.9s var(--ease);
+  transition-delay: calc(var(--k) * 0.04s + 0.15s);
+}
+
+.in .lt {
+  opacity: 1;
+  transform: none;
+}
+
+/* "Certifications & Activities" stays on one line. */
+#credentials .ttl {
+  white-space: nowrap;
+  font-size: clamp(0.7rem, 2.6vw, 1.7rem);
+  letter-spacing: 0.22em;
+}
+
+/* ---------- contact call to action ---------- */
+.cta {
+  align-items: center;
+  text-align: center;
+}
+
+.cx {
+  width: 100%;
+  max-width: 1240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.eb {
+  font: 500 11px var(--ui);
+  letter-spacing: 0.4em;
+  padding-left: 0.4em;
+  text-transform: uppercase;
+  color: var(--d);
+  margin: 0 0 18px;
+  text-shadow: 0 0 14px var(--bg);
+}
+
+.eb::before {
+  content: counter(s, decimal-leading-zero) "  —  ";
+}
+
+.big {
+  margin: 0;
+  font: 700 clamp(2.2rem, 7vw, 6rem)/0.9 var(--disp);
+  letter-spacing: 0.015em;
+  color: #fff;
+  text-shadow:
+    0 0 40px var(--bg),
+    0 6px 30px rgba(0, 0, 0, 0.45);
+}
+
+.big > * {
+  display: block;
+  clip-path: inset(0 0 100% 0);
+  transform: translateY(45%);
+  transition:
+    clip-path 1.2s var(--ease),
+    transform 1.2s var(--ease);
+}
+
+.big em {
+  font-style: italic;
+  font-weight: 600;
+  color: transparent;
+  -webkit-text-stroke: 1.5px #fff;
+  transition:
+    clip-path 1.2s var(--ease) 0.3s,
+    transform 1.2s var(--ease) 0.3s,
+    color 0.5s;
+}
+
+.big span:nth-child(2) {
+  transition-delay: 0.15s;
+}
+
+.cx.in .big > * {
+  clip-path: inset(-12% -4% -22% -4%);
+  transform: none;
+}
+
+.cx:hover .big em {
+  color: rgba(255, 255, 255, 0.92);
+  -webkit-text-stroke-color: transparent;
+}
+
+.sb {
+  max-width: 620px;
+  margin: 26px 0 22px;
+  font: italic 500 clamp(1.05rem, 1.8vw, 1.35rem)/1.5 var(--disp);
+  color: #e6e6e6;
+  text-shadow: 0 0 14px var(--bg);
+}
+
+.mail {
+  background: none;
+  border: 0;
+  border-bottom: 1px dotted #fff;
+  color: #fff;
+  cursor: pointer;
+  font: italic 600 clamp(1.4rem, 3.2vw, 2.4rem) var(--disp);
+  padding: 4px 2px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  transition: letter-spacing 0.4s var(--ease);
+}
+
+.mail:hover {
+  letter-spacing: 0.04em;
+}
+
+.mail span {
+  font: 600 10.5px var(--ui);
+  font-style: normal;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  border: 1px solid var(--l2);
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+
+.btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 34px;
+}
+
+.btns a {
+  font: 600 11px var(--ui);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #fff;
+  text-decoration: none;
+  padding: 16px 34px 16px calc(34px + 0.3em);
+  border: 1.5px solid #fff;
+  border-radius: 999px;
+  background: rgba(34, 34, 34, 0.6);
+  transition: 0.35s;
+}
+
+.btns a:hover {
+  background: #fff;
+  color: #000;
+  transform: translateY(-3px);
+  box-shadow: 0 14px 40px -12px rgba(255, 255, 255, 0.6);
+}
+
+.btns .solid {
+  background: #fff;
+  color: #000;
+}
+
+.btns .solid:hover {
+  background: var(--bg);
+  color: #fff;
+}
+
+@media (max-width: 900px) {
+  .gs {
+    padding-top: 34vh;
+  }
+
+  .panel {
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.03) 42%, rgba(0, 0, 0, 0.3)),
+      rgba(8, 8, 8, 0.68);
+  }
+
+  .ed,
+  .sk,
+  .two {
+    grid-template-columns: 1fr;
+  }
+
+  .cta {
+    padding-top: 12vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel > *:not(.ttl, .edge, .cn),
+  .ed,
+  .xp,
+  .act,
+  .aw,
+  .lst > div,
+  .sk > div {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .panel > .edge {
+    animation: none;
+  }
+
+  .lt {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .panel.live {
+    transform: none;
+  }
+}

@@ -1,0 +1,12 @@
+---
+// Glass panel (was the P() helper). The edge light and corner brackets come last,
+// exactly where the original script appended them.
+import SplitTitle from "./SplitTitle.astro";
+interface Props {
+  side: "pl" | "pr";
+  width: "w1" | "w2" | "w3";
+  title: string;
+}
+const { side, width, title } = Astro.props;
+---
+<div class={`panel ${side} ${width} rv`}><SplitTitle text={title} /><slot /><i class="edge"></i><i class="cn a"></i><i class="cn b"></i><i class="cn c"></i><i class="cn d"></i></div>

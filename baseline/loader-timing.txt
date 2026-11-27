@@ -1,0 +1,2 @@
+Unthrottled {"median":{"exitStart":4076,"interactive":4428,"gone":5979},"runs":[{"exitStart":3973,"interactive":4333,"gone":5874},{"exitStart":4014,"interactive":4366,"gone":5917},{"exitStart":4152,"interactive":4503,"gone":6054},{"exitStart":4076,"interactive":4428,"gone":5979},{"exitStart":4098,"interactive":4450,"gone":6001}]}
+Slow 4G + 4x CPU {"median":{"exitStart":7121,"interactive":7497,"gone":9056},"runs":[{"exitStart":7293,"interactive":7674,"gone":9249},{"exitStart":7121,"interactive":7497,"gone":9056},{"exitStart":7105,"interactive":7488,"gone":9044}]}
